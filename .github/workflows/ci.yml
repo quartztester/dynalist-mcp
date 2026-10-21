@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tool-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: |
+          uv venv
+          uv pip install -e .
+
+      - name: Tool manifest + pure-helper checks (no network, no token)
+        run: |
+          .venv/bin/python - <<'EOF'
+          import asyncio
+          import dynalist_mcp.server as s
+
+          # 1. Exact tool manifest — renaming/adding a tool must be a conscious choice.
+          expected = {
+              "dynalist_list_files",
+              "dynalist_read_document",
+              "dynalist_find_items",
+              "dynalist_edit_document",
+              "dynalist_edit_files",
+              "dynalist_add_to_inbox",
+              "dynalist_check_updates",
+              "dynalist_upload_file",
+              "dynalist_get_preference",
+              "dynalist_set_preference",
+          }
+          names = {t.name for t in asyncio.run(s.server.list_tools())}
+          assert names == expected, f"tool manifest drift: {names ^ expected}"
+
+          # 2. Outline renderer: nesting, checkbox, heading, note.
+          nodes = [
+              {"id": "a", "content": "P", "heading": 1, "children": ["b", "c"]},
+              {"id": "b", "content": "open", "checkbox": True, "checked": False, "note": "n", "children": []},
+              {"id": "c", "content": "done", "checkbox": True, "checked": True, "children": ["d"]},
+              {"id": "d", "content": "sub", "children": []},
+          ]
+          outline = s._render_outline(nodes)
+          lines = outline.splitlines()
+          assert lines[0] == "[H1] P  <a>", lines[0]
+          assert lines[1].startswith("  [ ] open  <b>")
+          assert lines[2].startswith("  [x] done  <c>")
+          assert lines[3].startswith("    sub  <d>"), lines[3]
+
+          # 3. Path derivation uses folder children arrays (nested paths).
+          files = [
+              {"id": "doc", "title": "Todo", "type": "document", "permission": 2},
+              {"id": "fol", "title": "Study", "type": "folder", "permission": 2, "children": ["doc"]},
+              {"id": "root", "title": "R", "type": "folder", "permission": 4, "children": ["fol"]},
+          ]
+          paths = {f["id"]: f["path"] for f in s._flatten_files(files)}
+          assert paths["doc"] == "/R/Study/Todo", paths
+
+          # 4. Action field validation rejects bad payloads before any API call.
+          try:
+              s.dynalist_edit_document("x", [{"action": "insert", "node_id": "n"}])
+              raise AssertionError("expected ValueError")
+          except ValueError:
+              pass
+
+          print("CI checks passed:", len(names), "tools")
+          EOF
