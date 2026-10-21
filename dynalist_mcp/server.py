@@ -1,8 +1,17 @@
 """Dynalist MCP server.
 
+SPDX-License-Identifier: GPL-3.0-or-later
+
 Exposes the Dynalist API v1 (https://apidocs.dynalist.io/) as MCP tools.
 Auth: set the DYNALIST_API_TOKEN environment variable to your personal
 API secret from https://dynalist.io/developer.
+
+Copyright (C) 2026 quartztester
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version. See LICENSE for details.
 """
 
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # dynalist-mcp
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![MCP](https://img.shields.io/badge/MCP-stdio-blueviolet)](https://modelcontextprotocol.io)
 [![CI](https://github.com/quartztester/dynalist-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/quartztester/dynalist-mcp/actions/workflows/ci.yml)
@@ -147,4 +147,10 @@ CI runs that same tool-manifest check on every push and PR (see [CONTRIBUTING.md
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+Distributed under the terms of the GNU GPL v3 or later (`GPL-3.0-or-later`) — see [LICENSE](LICENSE).
+
+What that means in practice:
+
+- **Using the server** (running it locally, pointing MCP clients at it, using it with your own Dynalist account): no restrictions.
+- **Redistributing it or a modified version** (shipping it in an app, forking and distributing): you must provide the corresponding source under GPL-3.0 as well, and state changes.
+- Contributions are accepted under the same license.

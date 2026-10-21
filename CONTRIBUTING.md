@@ -28,6 +28,7 @@ helpers. If you intentionally rename, add, or remove a tool, update the
 
 ## Conventions
 
+- This project is GPL-3.0-or-later; contributions are accepted under the same license.
 - Keep the client-side rate-limit buckets in `server.py` in sync with
   [the published API limits](https://apidocs.dynalist.io/) if Dynalist changes them,
   and mirror any change in the README's Limitations table.
