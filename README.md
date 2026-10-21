@@ -1,5 +1,10 @@
 # dynalist-mcp
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![MCP](https://img.shields.io/badge/MCP-stdio-blueviolet)](https://modelcontextprotocol.io)
+[![CI](https://github.com/quartztester/dynalist-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/quartztester/dynalist-mcp/actions/workflows/ci.yml)
+
 An [MCP](https://modelcontextprotocol.io) (Model Context Protocol) server for the [Dynalist](https://dynalist.io) outliner. It lets MCP clients — Claude Desktop, Cursor, Windsurf, and any other MCP-capable agent — read, search, and edit your Dynalist documents, folders, and inbox.
 
 Every endpoint of the official [Dynalist API v1](https://apidocs.dynalist.io/) is exposed, plus two quality-of-life helpers: an indented outline renderer that annotates each item with its node ID, and a full-text item search (the API itself has no search endpoint).
@@ -65,6 +70,19 @@ You can also put the token in a `.env` file (`cp .env.example .env`) when runnin
 
 Typical agent flow: `list_files` → `read_document` (copy a `<node ID>` from the outline) → `edit_document`.
 
+### What the outline helper returns
+
+`dynalist_read_document` renders the item tree so an agent (or you) can read it at a glance and grab the exact IDs to edit:
+
+```text
+[H1] Project X  <a1f3c9…>
+  [ ] Buy milk  <b7e2d4…>  // note: '2L whole milk'
+  [x] Done thing  <c9a8b1…>
+    sub item  <d4f6e0…>
+```
+
+`[x]`/`[ ]` are checkbox state, `[H1..H3]` are headings, and each `<id>` is the node ID accepted by `dynalist_edit_document`.
+
 ## Limitations
 
 All of the following come from the [official API docs](https://apidocs.dynalist.io/) and are inherent to the Dynalist API, not bugs in this server.
@@ -124,6 +142,8 @@ Every response carries `_code` (`OK` on success) and `_msg`. This server raises 
 uv venv && uv pip install -e .
 python -c "import asyncio, dynalist_mcp.server as s; print(len(asyncio.run(s.server.list_tools())), 'tools registered')"
 ```
+
+CI runs that same tool-manifest check on every push and PR (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
 ## License
 
