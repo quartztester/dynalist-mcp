@@ -1,6 +1,6 @@
 # dynalist-mcp
 
-[![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![License: AGPL-3.0-or-later](https://img.shields.io/badge/License-AGPLv3-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![MCP](https://img.shields.io/badge/MCP-stdio-blueviolet)](https://modelcontextprotocol.io)
 [![CI](https://github.com/quartztester/dynalist-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/quartztester/dynalist-mcp/actions/workflows/ci.yml)
@@ -147,7 +147,7 @@ CI runs that same tool-manifest check on every push and PR (see [CONTRIBUTING.md
 
 ## License
 
-Distributed under the terms of the GNU GPL v3 or later (`GPL-3.0-or-later`) — see [LICENSE](LICENSE).
+Distributed under the terms of the GNU AGPL v3 or later (`AGPL-3.0-or-later`) — see [LICENSE](LICENSE).
 
 What that means in practice:
 
